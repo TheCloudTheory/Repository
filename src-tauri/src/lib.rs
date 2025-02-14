@@ -3,6 +3,10 @@ mod commands {
     pub mod create_file;
 }
 
+mod models {
+    pub mod repository;
+}
+
 use commands::list_files::list_files;
 use commands::create_file::create_file;
 

@@ -1,3 +1,6 @@
+use std::io::Write;
+use crate::models::repository::{Repository, File};
+
 #[tauri::command]
 pub fn create_file(file_name: &str) -> Result<(), String> {
     // We need to check if the file already exists
@@ -12,6 +15,21 @@ pub fn create_file(file_name: &str) -> Result<(), String> {
 
     // We need to create the file
     std::fs::File::create(format!("{}.md", &file_name)).unwrap();
+
+    // We also need to update the metadata file and put a reference
+    // to the new file there. This will help in keeping the actual
+    // file name detached from the UI and other information stored there
+    let metadata = std::fs::read_to_string("__repository.toml").unwrap();
+    let mut parsed: Repository = toml::from_str(&metadata).unwrap();
+    parsed.files.insert(file_name.clone(), File {
+        name: file_name.clone(),
+        extension: "md".to_string(),
+    });
+
+    // In the end we need to update the metadata file
+    let new_metadata = toml::to_string(&parsed).unwrap();
+    let mut file = std::fs::File::create("__repository.toml").unwrap();
+    file.write_all(new_metadata.as_bytes()).unwrap();
 
     Ok(())
 }

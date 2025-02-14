@@ -1,37 +1,13 @@
 use std::io::Write;
-use serde::{Deserialize, Serialize};
 use chrono::prelude::*;
+use crate::models::repository::{General, Repository, Directory, DirectoryObject};
 
 // Define an array of supported file extensions
 const SUPPORTED_EXTENSIONS: [&str; 1] = ["md"];
 
-#[derive(Deserialize, Serialize)]
-pub struct Repository {
-    general: General,
-    directory: Option<Directory>
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct General {
-    repository_name: String,
-    created_on: String,
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct Directory {
-    objects: Vec<DirectoryObject>,
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct DirectoryObject {
-    is_directory: bool,
-    name: String,
-    objects: Vec<DirectoryObject>,
-}
-
 #[tauri::command]
 pub fn list_files() -> Result<Repository, String> {
-    // In order to display the list of files we need to read the current directory
+    // In order to display the list of files we need to read thśe current directory
     // and see if there is a __repository.toml file. This file acts as the metadata
     // store, so we can save some state regarding the repository. Otherwise, we create
     // a new repository by creating the __repository.toml file.
@@ -87,12 +63,14 @@ pub fn list_files() -> Result<Repository, String> {
         file.write_all(b"[general]\n").unwrap();
         file.write_all(b"repository_name = \"New Repository\"\n").unwrap();
         file.write_all(format!("created_on = \"{}\"\n", date).as_bytes()).unwrap();
+        file.write_all(b"\n[files]\n").unwrap();
 
         return Ok(Repository {
             general: General {
                 repository_name: "New Repository".to_string(),
                 created_on: date,
             },
+            files: Default::default(),
             directory: Some(Directory {
                 objects: vec![], // No files yet
             }),
