@@ -1,5 +1,5 @@
 use std::io::Write;
-use crate::models::repository::{Repository, File};
+use crate::models::repository::{Repository, DirectoryObject};
 
 #[tauri::command]
 pub fn create_file(file_name: &str) -> Result<(), String> {
@@ -21,9 +21,11 @@ pub fn create_file(file_name: &str) -> Result<(), String> {
     // file name detached from the UI and other information stored there
     let metadata = std::fs::read_to_string("__repository.toml").unwrap();
     let mut parsed: Repository = toml::from_str(&metadata).unwrap();
-    parsed.files.insert(file_name.clone(), File {
+    parsed.objects.insert(file_name.clone(), DirectoryObject {
         name: file_name.clone(),
         extension: "md".to_string(),
+        is_directory: false,
+        objects: Default::default(),
     });
 
     // In the end we need to update the metadata file
