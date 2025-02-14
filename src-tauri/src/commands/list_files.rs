@@ -49,12 +49,18 @@ pub fn list_files() -> Result<Repository, String> {
             let entry = entry.unwrap();
             let path = entry.path();
             let is_directory = path.is_dir();
-            let name = entry.file_name().into_string().unwrap();
+            let mut name = entry.file_name().into_string().unwrap();
 
             // We don't want to include the repository metadata file
             // and files which are not supported by Repository
             if name == "__repository.toml" || !SUPPORTED_EXTENSIONS.iter().any(|&ext| name.ends_with(ext)) {
                 continue;
+            }
+
+            // If the object is a file, we need to remove the extension
+            // from the name so it looks better in the UI
+            if !is_directory {
+                name = name.split('.').collect::<Vec<&str>>()[0].to_string();
             }
 
             objects.push(DirectoryObject {
