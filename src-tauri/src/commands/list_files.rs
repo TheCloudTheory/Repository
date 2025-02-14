@@ -2,15 +2,31 @@ use std::io::Write;
 use serde::{Deserialize, Serialize};
 use chrono::prelude::*;
 
+// Define an array of supported file extensions
+const SUPPORTED_EXTENSIONS: [&str; 1] = ["md"];
+
 #[derive(Deserialize, Serialize)]
 pub struct Repository {
     general: General,
+    directory: Option<Directory>
 }
 
 #[derive(Deserialize, Serialize)]
 pub struct General {
     repository_name: String,
     created_on: String,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct Directory {
+    objects: Vec<DirectoryObject>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct DirectoryObject {
+    is_directory: bool,
+    name: String,
+    objects: Vec<DirectoryObject>,
 }
 
 #[tauri::command]
@@ -24,7 +40,33 @@ pub fn list_files() -> Result<Repository, String> {
         // and use it to provide some metadata plus the list of files in the
         // working directory (as it will be treated as a repository)
         let content = std::fs::read_to_string("__repository.toml").unwrap();
-        let parsed: Repository = toml::from_str(&content).unwrap();
+        let mut parsed: Repository = toml::from_str(&content).unwrap();
+
+        // The metadata file doesn't contain infomation about the directory
+        // structure hence we need to populate it by ourselves
+        let mut objects = vec![];
+        for entry in std::fs::read_dir(".").unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            let is_directory = path.is_dir();
+            let name = entry.file_name().into_string().unwrap();
+
+            // We don't want to include the repository metadata file
+            // and files which are not supported by Repository
+            if name == "__repository.toml" || !SUPPORTED_EXTENSIONS.iter().any(|&ext| name.ends_with(ext)) {
+                continue;
+            }
+
+            objects.push(DirectoryObject {
+                is_directory,
+                name,
+                objects: vec![],
+            });
+        }
+
+        parsed.directory = Some(Directory {
+            objects,
+        });
         
         return Ok(parsed);
     } else {
@@ -45,6 +87,9 @@ pub fn list_files() -> Result<Repository, String> {
                 repository_name: "New Repository".to_string(),
                 created_on: date,
             },
+            directory: Some(Directory {
+                objects: vec![], // No files yet
+            }),
         });
     }
 }

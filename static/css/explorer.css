@@ -1,0 +1,34 @@
+#explorer {
+    background-color: #181818;
+    color: #ffffff;
+    height: 100%;
+    left: 0px;
+    padding: 5px;
+    position: fixed;
+    top: 30px;
+    width: 15%;
+}
+
+#explorer ul {
+    list-style-type: none;
+    margin: 0;
+    padding-inline-start: 5px;
+}
+
+#explorer ul li:hover {
+    background-color: #505050;
+    cursor: pointer;
+}
+
+#explorer .sidebar-item-content button {
+    display: block;
+    font-size: 0.8em;
+    margin: 0 auto;
+}
+
+#explorer .sidebar-item-content .sidebar-new-file-form input {
+    border-radius: 0;
+    display: inline-flex;
+    font-size: 0.6em;
+    width: 89%;
+}
