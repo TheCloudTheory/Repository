@@ -6,10 +6,7 @@
         is_directory: boolean;
         name: string;
         objects: DirectoryObject[];
-    }
-
-    interface Directory {
-        objects: DirectoryObject[];
+        extension: string;
     }
 
     interface General {
@@ -19,7 +16,7 @@
 
     interface Repository {
         general: General;
-        directory: Directory;
+        objects: { [key: string]: DirectoryObject };
     }
   
     let repository = $state({
@@ -27,9 +24,7 @@
             repository_name: "",
             created_on: ""
         },
-        directory: {
-            objects: []
-        }
+        objects: {}
     } as Repository);
 
     let isAddingNewFile = $state(false);
@@ -85,12 +80,12 @@
                         />
                     </div>
                 {/if}
-                {#if repository.directory.objects.length === 0}
+                {#if Object.keys(repository.objects).length === 0}
                     <button class="info" onclick={handleOnNewFileButtonClicked}>+ Add new file</button>
                 {:else}
                 <ul>
-                    {#each repository.directory.objects as file}
-                        <li>{file.name}</li>
+                    {#each Object.keys(repository.objects) as file}
+                        <li>{repository.objects[file].name}</li>
                     {/each}
                 </ul>
                 {/if}
