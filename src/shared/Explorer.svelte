@@ -64,6 +64,20 @@
             isAddingNewFile = false;
         }
     }
+
+    async function handleRepositoryFileClicked(event: MouseEvent, key: string) {
+        await invoke<string>("open_file", { key }).then((response) => {
+            var fileView = document.getElementById("file-view");
+
+            if (fileView === null) {
+                return;
+            }
+            
+            fileView.innerHTML = response;
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
   </script>
 
 <aside id="explorer">
@@ -85,7 +99,10 @@
                 {:else}
                 <ul>
                     {#each Object.keys(repository.objects) as file}
-                        <li>{repository.objects[file].name}</li>
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_missing_attribute -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <li><a onclick={(e) => handleRepositoryFileClicked(e, file)}>{repository.objects[file].name}</a></li>
                     {/each}
                 </ul>
                 {/if}
