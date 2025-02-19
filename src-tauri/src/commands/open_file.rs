@@ -11,15 +11,12 @@ pub fn open_file(key: &str) -> Result<String, String> {
         return Err("File does not exist".to_string());
     }
 
-    // Get the actual file name from the metadata
-    let file_name = &parsed.objects.get(key).unwrap().name;
-
     // Check if the file exists. If it doesn't, return an error
-    if std::fs::metadata(format!(".repository/{}.md", &file_name)).is_ok() == false {
+    if std::fs::metadata(format!(".repository/{}.md", &key)).is_ok() == false {
         return Err("File does not exist".to_string());
     }
 
     // Read the content of the file and return it
-    let content = std::fs::read_to_string(format!(".repository/{}.md", &file_name)).unwrap();
+    let content = std::fs::read_to_string(format!(".repository/{}.md", &key)).unwrap();
     Ok(content)
 }

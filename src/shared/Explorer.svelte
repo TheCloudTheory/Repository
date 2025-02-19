@@ -66,6 +66,7 @@
     }
 
     async function handleRepositoryFileClicked(event: MouseEvent, key: string) {
+        console.log(key);
         await invoke<string>("open_file", { key }).then((response) => {
             var fileTitle = document.getElementById("file-title");
             var fileView = document.getElementById("file-view");
@@ -75,6 +76,7 @@
             }
 
             fileTitle.innerHTML = repository.objects[key].name;
+            fileTitle.dataset.repositoryKey = key;
 
             if (fileView === null) {
                 return;
