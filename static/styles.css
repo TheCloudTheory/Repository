@@ -152,3 +152,18 @@
     padding: 10px;
     padding-left: 0;
   }
+
+  #status-bar {
+    background-color: #282828;
+    color: #ffffff;
+    font-size: 0.8em;
+    left: 0px;
+    padding: 5px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+  }
+
+  #status-bar #status {
+    font-weight: bold;
+  }

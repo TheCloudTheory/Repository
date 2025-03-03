@@ -32,3 +32,21 @@
     font-size: 0.6em;
     width: 89%;
 }
+
+#explorer .sidebar-item-header {
+    position: relative;
+}
+
+#explorer .sidebar-item-header-newfile svg {
+    cursor: pointer;
+    fill: #fff;
+    width: 1.3em;
+    height: 1.3em;
+    position: absolute;
+    right: 5px;
+    top: 9px;
+}
+
+#explorer .sidebar-item-header-newfile svg:hover {
+    fill: #598ec3;
+}
