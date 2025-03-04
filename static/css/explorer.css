@@ -37,16 +37,20 @@
     position: relative;
 }
 
-#explorer .sidebar-item-header-newfile svg {
+#explorer .sidebar-item-header-newfile svg, #explorer .sidebar-item-header-newdirectory svg {
     cursor: pointer;
     fill: #fff;
     width: 1.3em;
     height: 1.3em;
     position: absolute;
-    right: 5px;
+    right: 25px;
     top: 9px;
 }
 
-#explorer .sidebar-item-header-newfile svg:hover {
+#explorer .sidebar-item-header-newfile svg:hover, #explorer .sidebar-item-header-newdirectory svg:hover {
     fill: #598ec3;
+}
+
+#explorer .sidebar-item-header-newdirectory svg {
+    right: 5px;
 }
