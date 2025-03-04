@@ -20,13 +20,28 @@
     cursor: pointer;
 }
 
+#explorer ul li.is-active {
+    background-color: #505050;
+}
+
+#explorer ul li {
+    padding: 2px;
+}
+
+#explorer ul li a {
+    color: #fff;
+    font-size: 0.9em;
+    font-weight: 100;
+}
+
 #explorer .sidebar-item-content button {
     display: block;
     font-size: 0.8em;
     margin: 0 auto;
 }
 
-#explorer .sidebar-item-content .sidebar-new-file-form input {
+#explorer .sidebar-item-content .sidebar-new-file-form input,
+#explorer .sidebar-item-content .sidebar-new-directory-form input {
     border-radius: 0;
     display: inline-flex;
     font-size: 0.6em;
@@ -53,4 +68,21 @@
 
 #explorer .sidebar-item-header-newdirectory svg {
     right: 5px;
+}
+
+#explorer .sidebar-item-is-directory {
+    position: relative;
+    padding-left: 20px;
+    color: #fff;
+    font-size: 0.9em;
+    font-weight: 400;
+}
+
+#explorer .sidebar-item-is-directory svg {
+    fill: #fff;
+    left: 0;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    top: 5px;
 }
